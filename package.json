@@ -1,0 +1,20 @@
+{
+  "name": "mp-pre-arbitrum",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.22.2",
+    "@graphprotocol/graph-ts": "0.22.1"
+  },
+  "devDependencies": {
+    "@types/coingecko-api": "^1.0.10",
+    "@types/node-fetch": "^2.6.2",
+    "chalk": "^4.1.2",
+    "coingecko-api": "^1.0.10",
+    "matchstick-as": "^0.5.0",
+    "winston": "^3.8.1"
+  }
+}

@@ -1,0 +1,133 @@
+
+enum TradeType {
+  Open
+  Close
+}
+
+type PositionFeeRate @entity {
+  id: ID!
+  symbol: Bytes!
+  positionFeeRate: BigInt!
+}
+
+type TradeRecord @entity {
+  id: ID!
+
+  type: TradeType!
+  trader: String!
+  assetId: Int!
+  collateralId: Int!
+  isLong: Boolean!
+  amount: BigInt!
+  price: BigInt!
+  referralCode: String!
+
+  transactionHash: String! 
+  transactionLogIndex: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
+
+type ReferralRecord @entity {
+  id: ID!
+
+  trader: String!
+  volume: BigInt!
+  positionFeeRate: PositionFeeRate!
+  feeUsd: BigInt! # positionFee
+  referralCode: String!
+
+  transactionHash: String! 
+  transactionLogIndex: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
+
+type ReferralStat @entity {
+  id: ID! # transactionId
+    
+  epochKey: String!
+  referralCode: String!
+  deltaVolume: BigInt!
+  deltaFeeUsd: BigInt!
+  deltaReferralTrade: BigInt!
+  totalVolume: BigInt!
+  totalFeeUsd: BigInt!
+  totalReferralTrade: BigInt!
+}
+
+type TraderStat @entity {
+  id: ID! # transactionId
+
+  epochKey: String!
+  trader: String!
+  referralCode: String!
+  deltaVolume: BigInt!
+  deltaFeeUsd: BigInt!
+  deltaReferralTrade: BigInt!
+  totalVolume: BigInt!
+  totalFeeUsd: BigInt!
+  totalReferralTrade: BigInt!
+}
+
+type Tier @entity {
+   id: ID! # level
+   stakeThreshold: BigInt!
+   discountRate: BigInt!
+   rebateRate: BigInt!
+   timestamp: BigInt!
+}
+
+type ReferralCode @entity {
+  id: ID! # code
+  code: String!
+  referrer: String!
+  recipient: String!
+  timestamp: BigInt!
+} 
+
+type ReferrerSetRecord @entity {
+  id: ID! # account
+  referralCode: String!
+  timestamp: BigInt!
+}
+
+enum DistributionType {
+  Rebate
+  Discount
+  Other
+}
+
+type DistributionRecord @entity {
+  id: ID! # transactionHash + transactionLogIndex + timestamp
+
+  type: DistributionType!
+  referralCode: String!
+  recipient: String!
+  amount: BigInt!
+
+  transactionHash: String! 
+  transactionLogIndex: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
+
+type RebateDistributionStat @entity {
+  id: ID!
+
+  referrer: String!
+  referralCode: String!
+  recipient: String!
+  totalRebate: BigInt!
+  totalRebateUsd: BigInt!
+  timestamp: BigInt!
+}
+
+type DiscountDistributionStat @entity {
+  id: ID!
+
+  trader: String!
+  totalDiscount: BigInt!
+  totalDiscountUsd: BigInt!
+  timestamp: BigInt!
+}
