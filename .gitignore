@@ -1,0 +1,9 @@
+node_modules
+build
+generated
+
+package-lock.json
+yarn.lock
+
+logs
+scripts/epochs
