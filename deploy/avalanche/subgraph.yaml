@@ -1,0 +1,62 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: LiquidityPool
+    network: avalanche
+    source:
+      address: "0x0bA2e492e8427fAd51692EE8958eBf936bEE1d84"
+      abi: LiquidityPool
+      startBlock: 19382406
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - OpenPosition
+        - ClosePosition
+        - SetAssetParams
+      abis:
+        - name: LiquidityPool
+          file: ./abis/LiquidityPool.json
+      eventHandlers:
+        - event: OpenPosition(indexed address,indexed uint8,(bytes32,uint8,bool,uint96,uint96,uint96,uint96,uint96,uint96,uint96))
+          handler: handleOpenPosition
+        - event: ClosePosition(indexed address,indexed uint8,(bytes32,uint8,uint8,bool,uint96,uint96,uint96,uint96,uint96,bool,uint96,uint96,uint96))
+          handler: handleClosePosition
+        - event: SetAssetParams(indexed uint8,bytes32,uint32,uint32,uint32,uint32,uint32,uint96,uint96,uint32,uint32)
+          handler: handleSetAssetParams
+      file: ./src/trade.ts
+  - kind: ethereum/contract
+    name: ReferralManager
+    network: avalanche
+    source:
+      address: "0x1444edF22cd6C891391f3644b435eF6b8270C4B0"
+      abi: ReferralManager
+      startBlock: 19382406
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - SetTiers
+        - SetReferralCode
+        - RegisterReferralCode
+        - SetRebateRecipient
+        - TransferReferralCode
+      abis:
+        - name: ReferralManager
+          file: ./abis/ReferralManager.json
+      eventHandlers:
+        - event: SetTiers((uint8,uint64,uint64,uint64)[])
+          handler: handleSetTier
+        - event: SetReferralCode(address,bytes32)
+          handler: handleSetReferralCode
+        - event: RegisterReferralCode(address,bytes32)
+          handler: handleRegisterReferralCode
+        - event: SetRebateRecipient(bytes32,address,address)
+          handler: handleSetRebateRecipient
+        - event: TransferReferralCode(bytes32,address,address)
+          handler: handleTransferReferralCode
+      file: ./src/tier.ts

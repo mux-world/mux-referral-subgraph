@@ -113,7 +113,8 @@ function _handleTradeEvent(
   const code = referralCode.referralCode
   const trader = subAccount.account
   // til last week + this week
-  var epochKey = getTimePostfix(event.block.timestamp, 'weekly')
+  // var epochKey = getTimePostfix(event.block.timestamp, 'weekly')
+  var epochKey = getTimePostfix(event.block.timestamp, 'daily')
   updateReferrerStat(
     code,
     epochKey,

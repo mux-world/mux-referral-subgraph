@@ -13,7 +13,6 @@ import {
 const ONE = BigInt.fromString("1000000000000000000")
 
 export function handleDisperseReferrerRebate(event: DisperseReferrerRebate): void {
-
   // - by referrer
   const referrer = event.params.referrer.toHexString()
   let stateByReferrer = RebateDistributionStat.load(referrer)
@@ -24,7 +23,9 @@ export function handleDisperseReferrerRebate(event: DisperseReferrerRebate): voi
   }
   stateByReferrer.totalRebate = stateByReferrer.totalRebate.plus(event.params.totalAmount)
   stateByReferrer.totalRebateUsd = stateByReferrer.totalRebateUsd.plus(event.params.totalAmount.times(event.params.usdPrice).div(ONE))
-  stateByReferrer.timestamp = event.block.timestamp
+  if (event.params.epoch > stateByReferrer.timestamp) {
+    stateByReferrer.timestamp = event.params.epoch
+  }
   stateByReferrer.save()
 
   // by entry
@@ -43,7 +44,9 @@ export function handleDisperseReferrerRebate(event: DisperseReferrerRebate): voi
     }
     statByCode.totalRebate = statByCode.totalRebate.plus(amount)
     statByCode.totalRebateUsd = statByCode.totalRebateUsd.plus(amount.times(event.params.usdPrice).div(ONE))
-    statByCode.timestamp = event.params.epoch
+    if (event.params.epoch > statByCode.timestamp) {
+      statByCode.timestamp = event.params.epoch
+    }
     statByCode.save()
   }
 }
@@ -61,7 +64,9 @@ export function handleDisperseTraderDiscount(event: DisperseTraderDiscount): voi
     }
     stateByTrader.totalDiscount = stateByTrader.totalDiscount.plus(amount)
     stateByTrader.totalDiscountUsd = stateByTrader.totalDiscountUsd.plus(amount.times(event.params.usdPrice).div(ONE))
-    stateByTrader.timestamp = event.params.epoch
+    if (event.params.epoch > stateByTrader.timestamp) {
+      stateByTrader.timestamp = event.params.epoch
+    }
     stateByTrader.save()
   }
 }
